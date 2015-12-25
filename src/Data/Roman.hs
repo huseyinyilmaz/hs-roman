@@ -5,25 +5,14 @@ module Data.Roman where
 
 import Data.List(group)
 
-data RomanDigit = I | V | X | L | C | D | M deriving (Show, Eq, Ord, Enum)
+data RomanDigit = I | V | X | L | C | D | M deriving (Show, Read, Eq, Ord, Enum)
 data Roman = Roman [RomanDigit] deriving (Eq, Ord)
 
 instance Show Roman where
   show (Roman ds) = concat (map show ds)
 
-instance Read RomanDigit where
-  readsPrec _ ('I':xs) = [(I, xs)]
-  readsPrec _ ('V':xs) = [(V, xs)]
-  readsPrec _ ('X':xs) = [(X, xs)]
-  readsPrec _ ('L':xs) = [(L, xs)]
-  readsPrec _ ('C':xs) = [(C, xs)]
-  readsPrec _ ('D':xs) = [(D, xs)]
-  readsPrec _ ('M':xs) = [(M, xs)]
-  readsPrec _ s = error ("Can't read this string:" ++ s)
-
 instance Read Roman where
   readsPrec _ xs = [(Roman (fmap (read.(\c->[c])) xs), [])]
-
 
 romanDigit2Int :: RomanDigit -> Int
 romanDigit2Int I = 1
@@ -46,7 +35,7 @@ romanToInt (Roman rs)= (sum.gd.(map sum).group.(map romanDigit2Int)) rs
 
 
 intToRoman :: Int -> Roman
-intToRoman i | i >= 1000 = error "Cannot convert number larger than 1000"
+intToRoman i | i >= 1000 || i<= 0 = error "Cannot convert number larger than 1000 and smaller than 0"
              |otherwise = Roman $ i2r i digits
   where
     digits = [(I)..]
