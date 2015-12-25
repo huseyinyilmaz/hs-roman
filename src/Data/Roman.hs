@@ -11,6 +11,20 @@ data Roman = Roman [RomanDigit] deriving (Eq, Ord)
 instance Show Roman where
   show (Roman ds) = concat (map show ds)
 
+instance Read RomanDigit where
+  readsPrec _ ('I':xs) = [(I, xs)]
+  readsPrec _ ('V':xs) = [(V, xs)]
+  readsPrec _ ('X':xs) = [(X, xs)]
+  readsPrec _ ('L':xs) = [(L, xs)]
+  readsPrec _ ('C':xs) = [(C, xs)]
+  readsPrec _ ('D':xs) = [(D, xs)]
+  readsPrec _ ('M':xs) = [(M, xs)]
+  readsPrec _ s = error ("Can't read this string:" ++ s)
+
+instance Read Roman where
+  readsPrec _ xs = [(Roman (fmap (read.(\c->[c])) xs), [])]
+
+
 romanDigit2Int :: RomanDigit -> Int
 romanDigit2Int I = 1
 romanDigit2Int V = 5
@@ -19,20 +33,6 @@ romanDigit2Int L = 50
 romanDigit2Int C = 100
 romanDigit2Int D = 500
 romanDigit2Int M = 1000
-
-charToRomanDigit:: Char -> RomanDigit
-charToRomanDigit 'I' = I
-charToRomanDigit 'V' = V
-charToRomanDigit 'X' = X
-charToRomanDigit 'L' = L
-charToRomanDigit 'C' = C
-charToRomanDigit 'D' = D
-charToRomanDigit 'M' = M
-charToRomanDigit s = error ("Cannot parse digit: " ++ [s])
-
-
-strToRoman:: String -> Roman
-strToRoman s = Roman $ fmap charToRomanDigit s
 
 
 romanToInt::Roman -> Int

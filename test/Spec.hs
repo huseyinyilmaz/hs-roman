@@ -31,11 +31,11 @@ testStrToRoman:: Test
 testStrToRoman = TestCase $ do (assertEqual
                                 "Test value V"
                                 (Roman [V])
-                                (strToRoman "V"))
+                                (read "V"))
                                (assertEqual
                                 "Test value XCIX"
                                 (Roman [X,C,I,X])
-                                (strToRoman "XCIX"))
+                                (read "XCIX"))
 
 testIntToRoman:: Test
 testIntToRoman = TestCase $ do (assertEqual
